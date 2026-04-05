@@ -16,12 +16,12 @@ BARCODE_FOLDER = 'static/barcodes'
 
 os.makedirs(BARCODE_FOLDER, exist_ok=True)
 
-scope = [
+SCOPES = [
     "https://spreadsheets.google.com/feeds",
     "https://www.googleapis.com/auth/drive"
 ]
 
-creds = ServiceAccountCredentials.from_json_keyfile_name("credentials.json", scope)
+creds = ServiceAccountCredentials.from_json_keyfile_name('/etc/secrets/credentials.json', SCOPES)
 client = gspread.authorize(creds)
 # ---------- Globl variables ----------
 product_sheet_key="1-ehBU680I4LuZl5B6p6SoihZCZcb75ODYSG6kJhEpLo"
@@ -292,7 +292,8 @@ def bills():
     bills_list = list(bills.values())
 
     return render_template("bills.html", bills=bills_list)
-if __name__ == '__main__':
-    app.run(debug=True)
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT",8080))
+    app.run(host="0.0.0.0", port=port)
 
 
