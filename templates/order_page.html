@@ -362,6 +362,8 @@
         }
 
         let scanner;
+        let lastScanned = "";
+        let scanLock = false;
 
         function startScanner() {
             document.getElementById("reader").style.display = "block";
@@ -369,24 +371,37 @@
             scanner = new Html5Qrcode("reader");
 
             scanner.start(
-                { facingMode: "environment" }, // back camera
+                { facingMode: "environment" },
                 {
                     fps: 10,
                     qrbox: 250
                 },
                 (decodedText) => {
-                    // 🔥 barcode read ho gaya
+
+                    // 🔥 duplicate fast scan avoid
+                    if (scanLock) return;
+
+                    if (decodedText === lastScanned) return;
+
+                    scanLock = true;
+                    lastScanned = decodedText;
+
+                    // set input
                     document.getElementById("barcodeInput").value = decodedText;
 
-                    addBarcode(); // direct add
+                    // add product
+                    addBarcode();
 
-                    // optional stop after scan
-                    scanner.stop();
-                    document.getElementById("reader").style.display = "none";
+                    // 🔊 sound + vibration
+                    navigator.vibrate?.(100);
+
+                    // ⏳ 1 sec delay before next scan
+                    setTimeout(() => {
+                        scanLock = false;
+                        lastScanned = "";
+                    }, 1000);
                 },
-                (error) => {
-                    // ignore scanning errors
-                }
+                (error) => { }
             );
         }
     </script>
