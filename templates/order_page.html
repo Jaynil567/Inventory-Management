@@ -88,6 +88,7 @@
                             <th>Product Name</th>
                             <th>Price</th>
                             <th>Count</th>
+                            <th>Stock</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -126,7 +127,8 @@
         PRODUCTS.forEach(p => {
             productMap[p.code] = {
                 name: p.name,
-                price: p.price
+                price: p.price,
+                stock: p.stock
             };
         });
 
@@ -155,6 +157,7 @@
                     code: code,
                     name: productMap[code].name,// ✅ name add
                     price: productMap[code].price,
+                    stock: productMap[code].stock,
                     count: 1
                 });
             }
@@ -202,7 +205,7 @@
 
                 </div>
             </td>
-
+            <td><b>${item.stock}</b></td>
             <td>
                 <button class="btn btn-danger btn-sm"
                     onclick="deleteRow('${item.code}')">
@@ -275,6 +278,7 @@
                         code: code,
                         name: productMap[code].name,
                         price: productMap[code].price,
+                        stock: productMap[code].stock,
                         count: 1
                     });
                 }
