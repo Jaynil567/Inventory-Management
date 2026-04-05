@@ -78,6 +78,14 @@
                 </button>
             </div>
 
+            <div class="mt-3">
+                <button class="btn btn-dark" onclick="startScanner()">
+                    <i class="bi bi-camera"></i> Scan with Camera
+                </button>
+
+                <div id="reader" style="width:300px; margin-top:10px; display:none;"></div>
+            </div>
+
             <!-- Table -->
             <div class="table-responsive">
                 <table class="table table-bordered table-hover text-center align-middle">
@@ -352,7 +360,37 @@
         function overlay() {
             document.getElementById("overlay").style.display = "block";
         }
+
+        let scanner;
+
+        function startScanner() {
+            document.getElementById("reader").style.display = "block";
+
+            scanner = new Html5Qrcode("reader");
+
+            scanner.start(
+                { facingMode: "environment" }, // back camera
+                {
+                    fps: 10,
+                    qrbox: 250
+                },
+                (decodedText) => {
+                    // 🔥 barcode read ho gaya
+                    document.getElementById("barcodeInput").value = decodedText;
+
+                    addBarcode(); // direct add
+
+                    // optional stop after scan
+                    scanner.stop();
+                    document.getElementById("reader").style.display = "none";
+                },
+                (error) => {
+                    // ignore scanning errors
+                }
+            );
+        }
     </script>
+    <script src="https://unpkg.com/html5-qrcode"></script>
 
 </body>
 
