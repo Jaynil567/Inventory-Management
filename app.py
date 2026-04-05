@@ -55,7 +55,8 @@ def get_products_from_sheet():
             products.append({
                 "code": str(row["ProductCode"]).strip().upper(),
                 "name": str(row["Name"]).strip(),
-                "price": float(row["Price"])
+                "price": float(row["Price"]),
+                "stock": int(row["Stock"])
             })
         return products
 
